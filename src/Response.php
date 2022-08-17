@@ -133,9 +133,11 @@ class Response implements Responsable
                 $value = $value->wait();
             }
 
-            if ($value instanceof ResourceResponse || $value instanceof JsonResource) {
-                $value = $value->toResponse($request)->getData(true);
-            }
+            // Stop calling ->toResponse on resources because we use them as nested objects in our responses
+            // and this introduces `data` wrapping to all nested API resources that we return.
+            //if ($value instanceof ResourceResponse || $value instanceof JsonResource) {
+            //    $value = $value->toResponse($request)->getData(true);
+            //}
 
             if ($value instanceof Arrayable) {
                 $value = $value->toArray();
